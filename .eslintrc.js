@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  parser: "vue-eslint-parser", // 解析器
+  parser: "babel-eslint", // 解析器
   globals: {
     wx: true
   },
