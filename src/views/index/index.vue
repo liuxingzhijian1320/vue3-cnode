@@ -77,7 +77,8 @@
     </ul>
 
     <ul class="content">
-      <li class="item px1" v-for="item in list" :key="item.id">
+      <li class="item px1" @click="goDetail(item)" v-for="item in list"
+        :key="item.id">
         <img class="item-avatar" :src="item.author.avatar_url" />
         <div class="item-type dc" :class="{'top': item.top}">
           {{item.top ? '置顶' : navs.find(code=>code.type == item.tab)?.title}}
@@ -97,8 +98,12 @@
 <script>
 import { ref, reactive, toRefs } from "vue";
 import { get } from "../../assets/scripts/request";
-import { friendlyFormatTime } from "../../assets/scripts/utils";
+import {
+  friendlyFormatTime,
+  defaultSetNavsFuc,
+} from "../../assets/scripts/utils";
 import backtop from "../../components/backtop";
+import { useRouter } from "vue-router";
 
 // 请求接口
 const useListEffect = (showloading, datalist, { page, tab }) => {
@@ -139,37 +144,14 @@ export default {
   name: "index",
   components: { backtop },
   setup() {
+    const router = useRouter();
+
     // navs的枚举值
-    const navs = [
-      {
-        title: "全部",
-        type: "",
-      },
-      {
-        title: "精华",
-        type: "good",
-      },
-      {
-        title: "问答",
-        type: "ask",
-      },
-      {
-        title: "分享",
-        type: "share",
-      },
-      {
-        title: "招聘",
-        type: "job",
-      },
-      {
-        title: "测试",
-        type: "dev",
-      },
-    ];
+    const navs = defaultSetNavsFuc();
 
     // default
     const showloading = ref(true); //是否显示loading效果
-    const tab = ref("");
+    const tab = ref("all");
     const page = ref(1);
     const datalist = reactive({ list: [] });
 
@@ -189,7 +171,6 @@ export default {
       showloading.value = true;
       datalist.list = [];
       page.value = 1;
-      console.log("showloading", datalist.list);
     };
 
     const { list } = useListEffect(showloading, datalist, { page, tab });
@@ -198,6 +179,10 @@ export default {
 
     const friendFuc = (str) => {
       return friendlyFormatTime(str);
+    };
+
+    const goDetail = ({ id }) => {
+      router.push(`/detail?id=${id}`);
     };
 
     return {
@@ -209,6 +194,7 @@ export default {
       tab,
       showloading,
       friendFuc,
+      goDetail,
     };
   },
 };
