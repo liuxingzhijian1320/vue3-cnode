@@ -90,6 +90,7 @@
         <div class="item-date dc">{{friendFuc(item.last_reply_at)}}</div>
       </li>
     </ul>
+    <backtop></backtop>
   </div>
 </template>
 
@@ -97,6 +98,7 @@
 import { ref, reactive, toRefs } from "vue";
 import { get } from "../../assets/scripts/request";
 import { friendlyFormatTime } from "../../assets/scripts/utils";
+import backtop from "../../components/backtop";
 
 // 请求接口
 const useListEffect = (showloading, datalist, { page, tab }) => {
@@ -135,7 +137,7 @@ const scrollHandler = (showloading, datalist, { page, tab }) => {
 
 export default {
   name: "index",
-  components: {},
+  components: { backtop },
   setup() {
     // navs的枚举值
     const navs = [

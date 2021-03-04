@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <!-- <slot> -->
     <router-view></router-view>
-    <!-- </slot> -->
     <tabs></tabs>
   </div>
 </template>
