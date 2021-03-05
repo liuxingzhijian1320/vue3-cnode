@@ -33,7 +33,8 @@ export default {
   display: flex;
   height: 1rem;
   z-index: 10;
-  background: #f5f5f5;
+  background: #fff;
+  box-shadow: 0rem 0rem 0.3rem rgba(#999, 0.5);
   display: flex;
   .tabs_item {
     flex: 1;

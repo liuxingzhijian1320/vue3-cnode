@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/home/home.vue";
 import Login from "../views/login/login.vue";
+import store from "../store";
 
 const routes = [
   {
@@ -40,6 +41,11 @@ const routes = [
     component: () => import("../views/detail/detail")
   },
   {
+    path: "/token",
+    name: "token",
+    component: () => import("../views/my/token")
+  },
+  {
     path: "/login",
     name: "login",
     component: Login
@@ -49,6 +55,11 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  store.commit("getUserInfo");
+  next();
 });
 
 export default router;
