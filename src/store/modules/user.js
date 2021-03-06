@@ -15,6 +15,7 @@ const mutations = {
   getUserInfo(state) {
     const data = JSON.parse(localStorage.getItem("vue3_cnodejs_token")) || {};
     state.userInfo = data;
+    state.userStatus = false;
   }
 };
 

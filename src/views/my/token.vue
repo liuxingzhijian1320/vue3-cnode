@@ -68,7 +68,6 @@ export default {
       if (!token.value) return;
       const result = await post(`/accesstoken/`, { accesstoken: token.value });
       if (result?.success) {
-        console.info(234, result);
         const { avatar_url, id, loginname } = result;
         const data = {
           avatar_url,

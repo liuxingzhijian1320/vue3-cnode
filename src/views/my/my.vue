@@ -92,14 +92,16 @@
         </div>
       </div>
     </div>
-    <div class="logout dc" @click="logout">退出</div>
+    <div class="logout dc" v-if="info.id" @click="logout">退出</div>
   </div>
 </template>
 
 <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { onMounted, toRefs, reactive } from "vue";
+import { onMounted, toRefs, reactive, computed, watchEffect, watch } from "vue";
+import { showToast } from "../../assets/scripts/tools";
+
 export default {
   name: "my",
   components: {},
@@ -111,9 +113,7 @@ export default {
       info: {},
     });
 
-    onMounted(() => {
-      userInfo.info = store.state.user.userInfo;
-    });
+    userInfo.info = computed(() => store.state.user.userInfo); // 这里注意指定user模块
 
     const goLogin = () => {
       if (!userInfo.info.loginname) {
@@ -122,7 +122,8 @@ export default {
     };
 
     const logout = () => {
-      store.commit("delUserInfo");
+      // store.commit("delUserInfo");
+      showToast({ title: "你好" });
     };
 
     return {
