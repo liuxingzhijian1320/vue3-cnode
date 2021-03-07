@@ -1,6 +1,9 @@
 const state = {
   ToastStatus: false,
-  ToastConfig: {}
+  ToastConfig: {},
+
+  MessageStatus: false,
+  MessageConfig: {}
 };
 
 const mutations = {
@@ -11,6 +14,25 @@ const mutations = {
   closeToast(state, payload) {
     state.ToastStatus = false;
     state.ToastConfig = {};
+  },
+  openMessage(state, payload) {
+    console.log(888, payload);
+    if (payload.type == "promise") {
+      if (payload.value) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject();
+      }
+    } else {
+      state.MessageStatus = true;
+      state.MessageConfig = payload;
+      return Promise.reject();
+    }
+  },
+  closeMessage(state, payload) {
+    state.MessageStatus = false;
+    state.MessageConfig = {};
+    this.commit("openMessage", { type: "promise", value: payload });
   }
 };
 
@@ -22,7 +44,10 @@ const actions = {
 
 const getters = {
   ToastStatus: state => state.ToastStatus,
-  ToastConfig: state => state.ToastConfig
+  ToastConfig: state => state.ToastConfig,
+
+  MessageStatus: state => state.MessageStatus,
+  MessageConfig: state => state.MessageConfig
 };
 
 export default {

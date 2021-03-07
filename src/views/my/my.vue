@@ -99,13 +99,22 @@
 <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { onMounted, toRefs, reactive, computed, watchEffect, watch } from "vue";
-import { showToast } from "../../assets/scripts/tools";
+import {
+  onMounted,
+  toRefs,
+  reactive,
+  computed,
+  watchEffect,
+  watch,
+  getCurrentInstance,
+} from "vue";
+import { showToast, showMessage } from "../../assets/scripts/tools";
 
 export default {
   name: "my",
   components: {},
   setup(props) {
+    const { ctx } = getCurrentInstance();
     const router = useRouter();
     const store = useStore();
 
@@ -122,8 +131,13 @@ export default {
     };
 
     const logout = () => {
-      // store.commit("delUserInfo");
-      showToast({ title: "你好" });
+      ctx.$message({
+        content: "您确定要退出吗？",
+        success: () => {
+          store.commit("delUserInfo");
+        },
+        fail: () => {},
+      });
     };
 
     return {
