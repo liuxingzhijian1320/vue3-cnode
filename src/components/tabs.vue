@@ -1,9 +1,9 @@
 <template>
   <div class="tabs">
     <div class="tabs_item dc" v-for="item in tabsList" :key="item.icon">
-      <router-link :to='item.name'>
+      <router-link :to='item.name' :class="{big: item.name === 'post'}">
         <i class="iconfont icon" :class="item.icon"></i>
-        <div class="tabs_title">{{item.text}}</div>
+        <div class="tabs_title" v-if="item.name != 'post'">{{item.text}}</div>
       </router-link>
     </div>
   </div>
@@ -15,8 +15,8 @@ export default {
   setup(props) {
     const tabsList = [
       { icon: "icon-index", text: "首页", name: "index" },
-      { icon: "icon-post", text: "发帖", name: "post" },
-      { icon: "icon-message", text: "消息", name: "message" },
+      { icon: "icon-jiahao", text: "发帖", name: "post" },
+      // { icon: "icon-message", text: "消息", name: "message" },
       { icon: "icon-my", text: "我的", name: "my" },
     ];
     return { tabsList };
@@ -41,6 +41,12 @@ export default {
     a {
       display: inline-block;
       text-align: center;
+      &.big {
+        margin-top: -0.5rem;
+        .icon {
+          font-size: 56px;
+        }
+      }
       .icon {
         font-size: 24px;
         text-align: center;
