@@ -73,7 +73,7 @@
       <div class="header-arrow pright" v-if="info.id"> 详情</div>
     </div>
     <div class="list">
-      <div class="item px1">
+      <div class="item px1" @click="goCollect">
         <div class="icon">
           <i class="iconfont icon-shoucang font-icon"></i>
         </div>
@@ -82,7 +82,7 @@
           <i class="iconfont icon-arrow arrow-icon pright"></i>
         </div>
       </div>
-      <div class="item">
+      <div class="item" @click="goTheme">
         <div class="icon">
           <i class="iconfont icon-theme font-icon"></i>
         </div>
@@ -140,11 +140,27 @@ export default {
         });
     };
 
+    const goCollect = () => {
+      if (!userInfo.info.id) {
+        router.push("/token");
+      } else {
+        router.push("/collect");
+      }
+    };
+
+    const goTheme = () => {
+      if (!userInfo.info.id) {
+        router.push("/token");
+      }
+    };
+
     return {
       ...toRefs(userInfo),
 
       goLogin,
       logout,
+      goCollect,
+      goTheme,
     };
   },
 };

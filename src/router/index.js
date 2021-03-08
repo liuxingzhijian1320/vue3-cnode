@@ -46,6 +46,11 @@ const routes = [
     component: () => import("../views/my/token")
   },
   {
+    path: "/collect",
+    name: "collect",
+    component: () => import("../views/my/collect")
+  },
+  {
     path: "/login",
     name: "login",
     component: Login
