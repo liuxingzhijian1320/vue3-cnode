@@ -86,7 +86,7 @@
         <div class="icon">
           <i class="iconfont icon-theme font-icon"></i>
         </div>
-        <div class="value dc">我的主题</div>
+        <div class="value dc">我的帖子</div>
         <div class="icon">
           <i class="iconfont icon-arrow arrow-icon pright"></i>
         </div>
@@ -151,6 +151,8 @@ export default {
     const goTheme = () => {
       if (!userInfo.info.id) {
         router.push("/token");
+      } else {
+        router.push("/theme");
       }
     };
 
