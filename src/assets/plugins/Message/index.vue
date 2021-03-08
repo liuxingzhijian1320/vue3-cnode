@@ -5,7 +5,7 @@
       <div class="default-message-value" v-html="content"></div>
       <div class="default-message-btns">
         <div class="default-message-cancle default-message-btn"
-          v-if="setCancleColor" :style="setCancleColor()"
+          v-if="cancleText" :style="setCancleColor()"
           @click.prevent.stop="handleCancel">
           {{cancleText}}
         </div>
@@ -46,7 +46,7 @@ export default defineComponent({
     // 取消按钮文字
     cancleText: {
       type: String,
-      default: "取消",
+      default: "",
     },
     // 取消按钮文字颜色
     cancleTextColor: {

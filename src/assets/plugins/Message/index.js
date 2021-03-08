@@ -13,7 +13,7 @@ const $message = function(options) {
 };
 
 export default {
-  //组件祖册
+  //组件注册
   install(app) {
     app.config.globalProperties.$message = $message;
   }

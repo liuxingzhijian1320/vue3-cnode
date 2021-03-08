@@ -7,7 +7,7 @@ import "./assets/styles/index.scss";
 
 import Message from "./assets/plugins/Message";
 
-const app = createApp(App);
+export const app = createApp(App);
 
 app.use(Message);
 app.use(store);
