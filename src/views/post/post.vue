@@ -77,7 +77,8 @@
   <div class="wrapper">
     <div class="input-div">
       <div class="label">话题</div>
-      <input class="input" placeholder="请输入话题" type="text" />
+      <input class="input" v-model.trim="formData.title" placeholder="请输入话题"
+        type="text" />
     </div>
     <div class="input-div">
       <div class="label">板块</div>
@@ -85,27 +86,32 @@
         <span class="list-span"
           :class="{'active': activeIndex == index, 'disbaled': item.disbaled}"
           v-for="(item, index) in navs" :key="item"
-          @click="item.disbaled ? '': activeIndex = index">{{item.title}}</span>
+          @click="selectItemHandler(item, index)">{{item.title}}</span>
       </div>
     </div>
     <div class="input-div">
       <div class="label">内容</div>
-      <textarea class="textarea" placeholder="请输入内容" id="" cols="30"
-        rows="10"></textarea>
+      <textarea class="textarea" placeholder="请输入内容" id="" cols="30" rows="10"
+        v-model.trim="formData.content"></textarea>
     </div>
 
-    <div class="submit dc">提交</div>
+    <div class="submit dc" @click="postHandler">提交</div>
   </div>
 </template>
 
 <script>
 import { defaultSetNavsFuc } from "../../assets/scripts/utils";
-import { ref } from "vue";
-
+import { ref, reactive, toRefs } from "vue";
+import { showToast, showMessage } from "../../assets/scripts/tools";
+import loginVue from "../login/login.vue";
+import { post } from "../../assets/scripts/request";
+import { useRouter } from "vue-router";
 export default {
   name: "post",
   components: {},
   setup() {
+    const router = useRouter();
+
     // navs的枚举值
     const navs = defaultSetNavsFuc();
     navs.forEach((c) => {
@@ -115,11 +121,62 @@ export default {
         c.disbaled = false;
       }
     });
-    const activeIndex = ref(5);
+    const activeIndex = ref(-1);
+    const obj = reactive({
+      formData: {
+        title: "",
+        tab: "",
+        content: "",
+      },
+    });
+
+    const selectItemHandler = (item, index) => {
+      if (item.disbaled) {
+        showToast({ title: "当前模块不支持测试环境使用" });
+      } else {
+        activeIndex.value = index;
+        obj.formData.tab = item.type;
+      }
+    };
+
+    const postHandler = () => {
+      const { title, tab, content } = obj.formData;
+      if (!title) {
+        showToast({ title: "请填写标题" });
+      } else if (title && title.length < 0) {
+        showToast({ title: "标题长度至少为10个字" });
+      } else if (!tab) {
+        showToast({ title: "请选择模块" });
+      } else if (!content) {
+        showToast({ title: "请填写内容" });
+      } else {
+        showMessage({ content: "确认提交吗？", cancleText: "返回修改" }).then(
+          async () => {
+            const result = await post(`/topics/`, {
+              accesstoken: localStorage.getItem("vue3_cnodejs_accesstoken"),
+              ...obj.formData,
+            });
+            if (result?.success) {
+              showMessage({
+                title: "发布成功！",
+                content: "是否立即前往？",
+                cancleText: "暂时不用",
+                okText: "我要去",
+              }).then(() => {
+                router.push(`/detail?id=${result.topic_id}`);
+              });
+            }
+          }
+        );
+      }
+    };
 
     return {
       navs,
       activeIndex,
+      selectItemHandler,
+      ...toRefs(obj),
+      postHandler,
     };
   },
 };

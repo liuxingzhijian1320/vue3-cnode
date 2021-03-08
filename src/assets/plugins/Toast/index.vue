@@ -6,7 +6,6 @@
   bottom: 0;
   left: 0;
   z-index: 1000;
-
   .default-toast-content {
     display: inline-block;
     font-size: 14px;
@@ -17,6 +16,7 @@
     transition: all 0.3s ease-out;
     animation: fadeIn 0.3s ease-out;
     position: absolute;
+    text-align: center;
     &.center {
       left: 50%;
       top: 50%;
@@ -46,7 +46,7 @@
 <template>
   <transition>
     <div class="default-toast">
-      <div class="default-toast-content" :class="position">1231</div>
+      <div class="default-toast-content" :class="position">{{title}}</div>
     </div>
   </transition>
 </template>
@@ -56,27 +56,36 @@ export default defineComponent({
   props: {
     title: {
       type: String,
-      default: "填写信息",
+      default: "",
       required: true,
     },
     seconds: {
-      type: Number, // ms
-      default: 2000,
+      type: Number,
+      default: 2000, // ms
     },
     position: {
       type: String,
       default: "center", // center top bottom
     },
   },
-  setup(props, { attrs, slots, emit }) {
+  setup(props, { emit }) {
     const timer = ref(null);
+
+    // 移除当前组件
+    function removeModal() {
+      const modelDom = document.body.querySelector(
+        `.__default__container__toast__`
+      );
+      if (modelDom) {
+        document.body.removeChild(modelDom);
+      }
+    }
 
     onMounted(() => {
       timer.value = setTimeout(() => {
         clearTimeout(timer.value);
         timer.value = null;
-        // 不直接用的原因，避免store污染该components
-        emit("closeToast");
+        removeModal();
       }, props.seconds);
     });
 

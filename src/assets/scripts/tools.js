@@ -1,7 +1,19 @@
 import { app } from "../../main";
 
-export function showToast({ title, seconds = 2000, position = "center" }) {
-  store.commit("openToast", { title, seconds, position });
+/**
+ * @params title String
+ * @params seconds Number
+ * @params position String
+ * @return
+ */
+
+export function showToast(params) {
+  return new Promise((resolve, reject) => {
+    app.config.globalProperties.$toast({
+      ...params
+    });
+    resolve();
+  });
 }
 
 /**

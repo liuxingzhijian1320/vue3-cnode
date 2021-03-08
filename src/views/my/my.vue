@@ -133,18 +133,11 @@ export default {
     const logout = () => {
       showMessage({ content: "您确定要退出吗？", cancleText: "取消" })
         .then((res) => {
-          console.log(res);
+          store.commit("delUserInfo");
         })
         .catch((err) => {
           console.log(err);
         });
-      // ctx.$message({
-      //   content: "您确定要退出吗？",
-      //   success: () => {
-      //     store.commit("delUserInfo");
-      //   },
-      //   fail: () => {},
-      // });
     };
 
     return {
