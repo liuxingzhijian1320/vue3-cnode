@@ -75,7 +75,7 @@
         <span class="header-item-inner">{{item.title}}</span>
       </li>
     </ul>
-
+    <loading v-if="showloading"></loading>
     <ul class="content">
       <li class="item px1" @click="goDetail(item)" v-for="item in list"
         :key="item.id">
@@ -105,66 +105,29 @@ import {
 import backtop from "../../components/backtop";
 import { useRouter } from "vue-router";
 
-// 请求接口
-const useListEffect = (showloading, datalist, { page, tab }) => {
-  const getList = async ({ page, tab }) => {
-    showloading.value = true;
-    const result = await get(
-      `/topics?page=${page.value}&tab=${tab.value}&limit=20`
-    );
-    if (result?.success && result?.data?.length) {
-      datalist.list = [...datalist.list, ...result.data];
-      showloading.value = false;
-    }
-  };
-  getList({ page, tab }, showloading);
-  return toRefs(datalist);
-};
-
-// 注册scroll事件并监听
-const scrollHandler = (showloading, datalist, { page, tab }) => {
-  window.addEventListener("scroll", () => {
-    let scrollTop =
-      document.documentElement.scrollTop ||
-      window.pageYOffset ||
-      document.body.scrollTop;
-
-    //判断是否滚动到底部
-    if (scrollTop + window.innerHeight + 50 >= document.body.offsetHeight) {
-      if (!showloading.value) {
-        //防止多次加载
-        page.value += 1;
-        useListEffect(showloading, datalist, { page, tab });
-      }
-    }
-  });
-};
-
 export default {
   name: "index",
   components: { backtop },
   setup() {
+    // router 对象
     const router = useRouter();
 
     // navs的枚举值
     const navs = defaultSetNavsFuc();
 
-    // default
+    // 默认
     const showloading = ref(true); //是否显示loading效果
     const tab = ref("all");
     const page = ref(1);
     const datalist = reactive({ list: [] });
+    const activeIndex = ref(0);
 
     // navs change event
-    const activeIndex = ref(0);
     const selectItem = (index) => {
       activeIndex.value = index;
       tab.value = navs[index].type || "";
       resetparams();
-      useListEffect(showloading, datalist, {
-        page,
-        tab,
-      });
+      useListEffect();
     };
 
     const resetparams = () => {
@@ -173,25 +136,57 @@ export default {
       page.value = 1;
     };
 
-    const { list } = useListEffect(showloading, datalist, { page, tab });
+    // 注册scroll事件并监听
+    const scrollHandler = () => {
+      window.addEventListener("scroll", () => {
+        let scrollTop =
+          document.documentElement.scrollTop ||
+          window.pageYOffset ||
+          document.body.scrollTop;
 
-    scrollHandler(showloading, datalist, { page, tab });
+        //判断是否滚动到底部
+        if (scrollTop + window.innerHeight + 50 >= document.body.offsetHeight) {
+          if (!showloading.value) {
+            //防止多次加载
+            page.value += 1;
+            useListEffect();
+          }
+        }
+      });
+    };
 
+    // 请求接口
+    const useListEffect = async () => {
+      if (page.value === 1) {
+        showloading.value = true;
+      }
+      const result = await get(
+        `/topics?page=${page.value}&tab=${tab.value}&limit=20`
+      );
+      if (result?.success && result?.data?.length) {
+        datalist.list = [...datalist.list, ...result.data];
+        showloading.value = false;
+      }
+    };
+
+    // 友好时间
     const friendFuc = (str) => {
       return friendlyFormatTime(str);
     };
 
+    // 跳转页面
     const goDetail = ({ id }) => {
       router.push(`/detail?id=${id}`);
     };
+
+    useListEffect();
+    scrollHandler();
 
     return {
       navs,
       activeIndex,
       selectItem,
-      list,
-      page,
-      tab,
+      ...toRefs(datalist),
       showloading,
       friendFuc,
       goDetail,
