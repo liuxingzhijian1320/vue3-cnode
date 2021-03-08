@@ -69,10 +69,10 @@
           <div class="name">{{item.author.loginname}}</div>
           <div class="time">{{friendFuc(item.create_at)}}</div>
         </div>
-        <div class="cancle btn" v-if="item.is_colelct"
-          @click="cancleCollect(item, $event)">取消收藏</div>
-        <div class="collect btn" v-if="!item.is_colelct"
-          @click="cancleCollect(item, $event)">收藏</div>
+        <div class="cancle btn" v-if="item.is_collect"
+          @click="collectHandler(item, $event)">取消收藏</div>
+        <div class="collect btn" v-if="!item.is_collect"
+          @click="collectHandler(item, $event)">收藏</div>
       </div>
       <div class="title">{{item.title}}</div>
       <div class="desc of2">{{item.content}}</div>
@@ -101,7 +101,7 @@ export default {
     const fetchData = async () => {
       const result = await get(`/topic_collect/${loginname.value}`);
       if (result?.success) {
-        result.data.forEach((code) => (code.is_colelct = true));
+        result.data.forEach((code) => (code.is_collect = true));
         obj.list = result.data;
       }
     };
@@ -119,8 +119,6 @@ export default {
         accesstoken: localStorage.getItem("vue3_cnodejs_accesstoken"),
         topic_id,
       });
-      // if (result?.success) {
-      // }
     };
 
     const friendFuc = (str) => {
@@ -131,23 +129,22 @@ export default {
       router.push(`/detail?id=${id}`);
     };
 
-    const cancleCollect = (item, event) => {
-      // console.log(item, event);
+    const collectHandler = (item, event) => {
       let e = event ? event : window.event;
       e.stopPropagation();
 
-      if (item.is_colelct) {
+      if (item.is_collect) {
         showMessage({
           content: "您确定取消该收藏吗？",
           cancleText: "取消",
         }).then(() => {
-          topicCollect(item.id, !item.is_colelct);
-          item.is_colelct = !item.is_colelct;
+          topicCollect(item.id, !item.is_collect);
+          item.is_collect = !item.is_collect;
           showToast({ title: "取消成功" });
         });
       } else {
-        topicCollect(item.id, !item.is_colelct);
-        item.is_colelct = !item.is_colelct;
+        topicCollect(item.id, !item.is_collect);
+        item.is_collect = !item.is_collect;
         showToast({ title: "收藏成功" });
       }
     };
@@ -159,7 +156,7 @@ export default {
 
       friendFuc,
       goDetail,
-      cancleCollect,
+      collectHandler,
     };
   },
 };
