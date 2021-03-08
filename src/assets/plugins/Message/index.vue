@@ -75,7 +75,7 @@ export default defineComponent({
     // 移除当前组件
     function removeModal() {
       const modelDom = document.body.querySelector(
-        `.__default__container_message__`
+        `.__default__container__message__`
       );
       if (modelDom) {
         document.body.removeChild(modelDom);
