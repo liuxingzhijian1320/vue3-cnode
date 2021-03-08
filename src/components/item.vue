@@ -4,15 +4,16 @@
       <img class="avatar" :src="item.author.avatar_url" alt="">
       <div class="item-name">
         <div class="name">{{item.author.loginname}}</div>
-        <div class="time">{{friendFuc(item.create_at)}}</div>
+        <div class="time" v-if="item.create_at">{{friendFuc(item.create_at)}}
+        </div>
       </div>
-      <div class="cancle btn" v-if="item.is_collect"
+      <div class="cancle btn" v-if="item.is_collect && show"
         @click.stop="collectHandler(item, $event)">取消收藏</div>
-      <div class="collect btn" v-if="!item.is_collect"
+      <div class="collect btn" v-if="!item.is_collect && show"
         @click.stop="collectHandler(item, $event)">收藏</div>
     </div>
-    <div class="title">{{item.title}}</div>
-    <div class="desc of2">{{item.content}}</div>
+    <div class="title" v-if="item.title">{{item.title}}</div>
+    <div class="desc of2" v-if="item.content">{{item.content}}</div>
   </div>
 
 </template>
@@ -24,7 +25,16 @@ import { showMessage, showToast } from "@/assets/scripts/tools";
 
 export default {
   name: "item",
-  props: ["item"],
+  props: {
+    item: {
+      type: Object,
+      default: {},
+    },
+    show: {
+      type: Boolean,
+      default: true,
+    },
+  },
   setup(props) {
     const router = useRouter();
 
@@ -33,9 +43,6 @@ export default {
     };
 
     const collectHandler = (item, event) => {
-      // let e = event ? event : window.event;
-      // e.stopPropagation();
-
       if (item.is_collect) {
         showMessage({
           content: "您确定取消该收藏吗？",
@@ -127,9 +134,9 @@ export default {
   font-size: 0.32rem;
   font-weight: bold;
   margin-top: 0.2rem;
-  margin-bottom: 0.3rem;
 }
 .desc {
+  margin-top: 0.3rem;
   font-size: 0.26rem;
   color: #999;
   line-height: 1.4;

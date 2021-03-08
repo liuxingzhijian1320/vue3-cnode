@@ -51,6 +51,12 @@ const routes = [
     component: () => import("../views/my/collect")
   },
   {
+    path: "/theme",
+    name: "theme",
+    component: () => import("../views/my/theme")
+  },
+
+  {
     path: "/login",
     name: "login",
     component: Login

@@ -128,7 +128,7 @@ export default defineComponent({
     transform: translate3d(-50%, -50%, 0);
     background-color: #fff;
     border-radius: 6px;
-    transition: all 0.2s ease-in;
+    transition: all 0.2s ease-out;
     color: #999;
     font-size: 18px;
   }

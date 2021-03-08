@@ -70,7 +70,7 @@
         <span v-if="!info.id">您还未登录！立即登录</span>
         <span v-else>{{info.loginname}}</span>
       </div>
-      <div class="header-arrow pright" v-if="info.id"> 详情</div>
+      <!-- <div class="header-arrow pright" v-if="info.id"> 详情</div> -->
     </div>
     <div class="list">
       <div class="item px1" @click="goCollect">
