@@ -26,7 +26,7 @@
     margin-top: 0.5rem;
   }
   .tips {
-    margin-top: 0.15rem;
+    margin-top: 0.25rem;
     font-size: 0.24rem;
     color: #999;
     a {
@@ -41,28 +41,34 @@
       <img class="img" src="../../assets/images/logo.png" alt="">
       <input type="text" placeholder="请输入token" v-model.trim="token"
         class="input" />
-      <div class="tips">当前的token获取方式：<a target="_blank"
-          href="https://cnodejs.org/setting">传送门👋👋👋</a> </div>
+      <div class="tips" @click="showHandler">当前的token获取方式👋👋👋
+        <!-- <a target="_blank"
+          href="https://cnodejs.org/setting">传送门👋👋👋</a> -->
+      </div>
       <div class="submit dc" @click="submit">登录</div>
     </div>
+
+    <guide @close="closeHandler" v-if="show"></guide>
   </div>
 </template>
 
 
 <script>
 import { post } from "../../assets/scripts/request";
-
-import { ref } from "vue";
+import { ref, defineAsyncComponent } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 export default {
   name: "token",
-  components: {},
+  components: {
+    guide: defineAsyncComponent(() => import("../../components/guide.vue")),
+  },
   setup(props) {
     const store = useStore();
     const router = useRouter();
     const token = ref("");
+    const show = ref(false);
 
     const submit = async () => {
       if (!token.value) return;
@@ -80,9 +86,20 @@ export default {
       }
     };
 
+    const showHandler = () => {
+      show.value = true;
+    };
+
+    const closeHandler = () => {
+      show.value = false;
+    };
+
     return {
       token,
+      show,
       submit,
+      showHandler,
+      closeHandler,
     };
   },
 };
