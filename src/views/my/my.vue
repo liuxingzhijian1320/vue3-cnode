@@ -99,15 +99,7 @@
 <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import {
-  onMounted,
-  toRefs,
-  reactive,
-  computed,
-  watchEffect,
-  watch,
-  getCurrentInstance,
-} from "vue";
+import { toRefs, reactive, computed, getCurrentInstance } from "vue";
 import { showToast, showMessage } from "../../assets/scripts/tools";
 
 export default {

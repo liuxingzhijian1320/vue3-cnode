@@ -55,7 +55,7 @@
       color: #80bd01;
       border-color: #80bd01;
     }
-    &.disbaled {
+    &.disabled {
       background: #dfdfdf;
       border-color: #dfdfdf;
     }
@@ -68,7 +68,7 @@
   font-size: 0.32rem;
   color: #fff;
   background: #117cf4;
-  &.disbaled {
+  &.disabled {
     background: lighten(#117cf4, 30%);
   }
 }
@@ -84,7 +84,7 @@
       <div class="label">板块</div>
       <div class="list">
         <span class="list-span"
-          :class="{'active': activeIndex == index, 'disbaled': item.disbaled}"
+          :class="{'active': activeIndex == index, 'disabled': item.disabled}"
           v-for="(item, index) in navs" :key="item"
           @click="selectItemHandler(item, index)">{{item.title}}</span>
       </div>
@@ -95,30 +95,37 @@
         v-model.trim="formData.content"></textarea>
     </div>
 
-    <div class="submit dc" @click="postHandler">提交</div>
+    <div class="submit dc" :class="{disabled: !userId}" @click="postHandler">提交
+    </div>
   </div>
 </template>
 
 <script>
 import { defaultSetNavsFuc } from "../../assets/scripts/utils";
-import { ref, reactive, toRefs } from "vue";
+import { ref, reactive, toRefs, computed } from "vue";
 import { showToast, showMessage } from "../../assets/scripts/tools";
 import loginVue from "../login/login.vue";
 import { post } from "../../assets/scripts/request";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
 export default {
   name: "post",
   components: {},
   setup() {
     const router = useRouter();
+    const store = useStore();
+
+    const userId = ref(0);
+    userId.value = computed(() => store.state.user.userInfo.id || 0).value;
 
     // navs的枚举值
     const navs = defaultSetNavsFuc();
     navs.forEach((c) => {
       if (c.type != "dev") {
-        c.disbaled = true;
+        c.disabled = true;
       } else {
-        c.disbaled = false;
+        c.disabled = false;
       }
     });
     const activeIndex = ref(-1);
@@ -131,7 +138,7 @@ export default {
     });
 
     const selectItemHandler = (item, index) => {
-      if (item.disbaled) {
+      if (item.disabled) {
         showToast({ title: "当前模块不支持测试环境使用" });
       } else {
         activeIndex.value = index;
@@ -143,12 +150,20 @@ export default {
       const { title, tab, content } = obj.formData;
       if (!title) {
         showToast({ title: "请填写标题" });
-      } else if (title && title.length < 0) {
+      } else if (title && title.length < 10) {
         showToast({ title: "标题长度至少为10个字" });
       } else if (!tab) {
         showToast({ title: "请选择模块" });
       } else if (!content) {
         showToast({ title: "请填写内容" });
+      } else if (!userId.value) {
+        showMessage({
+          title: "警告",
+          content: "系统检测您未登录，请登录",
+          okText: "立即登录",
+        }).then(() => {
+          router.push(`/token`);
+        });
       } else {
         showMessage({ content: "确认提交吗？", cancleText: "返回修改" }).then(
           async () => {
@@ -171,8 +186,24 @@ export default {
       }
     };
 
+    const judgeUerid = () => {
+      if (!userId.value) {
+        showMessage({
+          title: "温馨提示",
+          content: "系统检测您未登录，暂时无法发表文章！",
+          cancleText: "暂时不用",
+          okText: "立即登录",
+        }).then(() => {
+          router.push(`/token`);
+        });
+      }
+    };
+
+    judgeUerid();
+
     return {
       navs,
+      userId,
       activeIndex,
       selectItemHandler,
       ...toRefs(obj),

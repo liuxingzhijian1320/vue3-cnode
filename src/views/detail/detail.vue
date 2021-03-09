@@ -77,9 +77,9 @@
           <div class="header-name">{{detail.author.loginname}}</div>
           <div class="header-date">{{formatDate(detail.create_at)}}</div>
         </div>
-        <div class="cancle btn" v-if="detail.is_collect"
+        <div class="cancle btn" v-if="detail.is_collect && userId"
           @click="collectHandler(detail)">取消收藏</div>
-        <div class="collect btn" v-if="!detail.is_collect"
+        <div class="collect btn" v-if="!detail.is_collect && userId"
           @click="collectHandler(detail)">收藏</div>
         <!-- <div class="header-type dc" :class="{'top': detail.top}">
         {{detail.top ? '置顶' : defaultSetNavsFuc(detail.tab)?.title}}
@@ -96,18 +96,23 @@
 <script>
 import { get, post } from "../../assets/scripts/request";
 import { useRoute } from "vue-router";
-import { reactive, toRefs, ref } from "vue";
+import { reactive, toRefs, ref, computed } from "vue";
 import { defaultSetNavsFuc, formatDate } from "../../assets/scripts/utils";
 import { showMessage, showToast } from "../../assets/scripts/tools";
+import { useStore } from "vuex";
 
 export default {
   name: "detail",
   components: {},
   setup(props) {
+    const store = useStore();
     const route = useRoute();
     const detailId = route.query.id;
     const resultData = reactive({ detail: {} });
     const showloading = ref(false); //是否显示loading效果
+    const userId = ref(0);
+
+    userId.value = computed(() => store.state.user.userInfo.id || 0).value;
 
     const fetchDetail = async () => {
       showloading.value = true;
@@ -160,6 +165,7 @@ export default {
       defaultSetNavsFuc,
       formatDate,
       collectHandler,
+      userId,
     };
   },
 };
