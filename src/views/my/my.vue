@@ -2,7 +2,6 @@
 <style lang="scss" scoped>
 .wrapper {
   min-height: 100vh;
-  // padding: 0.3rem;
   background: #f5f5f5;
   box-sizing: border-box;
   .header {
@@ -13,14 +12,14 @@
     background: #07dfc0;
     position: relative;
   }
-  .avatar-icon {
-    font-size: 1.5rem;
-    color: #fff;
+  .avatar_url {
+    width: 1.28rem;
+    height: 1.28rem;
+    border-radius: 50%;
+    margin-right: 0.25rem;
   }
-  .header-arrow {
-    right: 0.3rem;
-    color: #999;
-    font-size: 0.26rem;
+  .not-login {
+    color: #dfdfdf;
   }
 }
 .list {
@@ -63,14 +62,15 @@
   <div class="wrapper">
     <div class="header">
       <div class="header-avatar">
-        <!-- <img :src="info.avatar_url" alt=""> -->
-        <i class="iconfont icon-avatar avatar-icon"></i>
+        <img v-if="info.avatar_url" class="avatar_url" :src="info.avatar_url"
+          alt="">
+        <img v-if="!info.avatar_url" class="avatar_url"
+          src="../../assets/images/avatar.png" alt="">
       </div>
       <div class="header-name dc" @click="goLogin">
-        <span v-if="!info.id">您还未登录！立即登录</span>
+        <span class="not-login" v-if="!info.id">您还未登录！立即登录</span>
         <span v-else>{{info.loginname}}</span>
       </div>
-      <!-- <div class="header-arrow pright" v-if="info.id"> 详情</div> -->
     </div>
     <div class="list">
       <div class="item px1" @click="goCollect">

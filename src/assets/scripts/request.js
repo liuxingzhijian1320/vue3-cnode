@@ -1,5 +1,6 @@
 import axios from "axios";
 import { showToast } from "./tools";
+const ERROR_MSG = "服务器异常，请稍后操作";
 
 const instance = axios.create({
   baseURL: "https://cnodejs.org/api/v1",
@@ -13,13 +14,15 @@ export const get = (url, params = {}) => {
         if (response.data.success) {
           resolve(response.data);
         } else {
-          showToast({ title: response.data.error_msg });
-          reject(response.data.error_msg);
+          const title = response?.data?.error_msg
+            ? response.data.error_msg
+            : ERROR_MSG;
+          showToast({ title });
+          reject(title);
         }
       },
       err => {
-        // showToast({ title: response.data.error_msg });
-        reject(err);
+        reject(ERROR_MSG);
       }
     );
   });
@@ -38,14 +41,15 @@ export const post = (url, data = {}) => {
           if (response.data.success) {
             resolve(response.data);
           } else {
-            showToast({ title: response.data.error_msg });
-            reject(response.data.error_msg);
+            const title = response?.data?.error_msg
+              ? response.data.error_msg
+              : ERROR_MSG;
+            showToast({ title });
+            reject(title);
           }
         },
         err => {
-          console.log(111, err);
-          // showToast({ title: response.data.error_msg });
-          reject(err);
+          reject(ERROR_MSG);
         }
       );
   });

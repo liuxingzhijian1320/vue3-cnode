@@ -42,18 +42,18 @@ export default {
       return formatDate(str);
     };
 
-    const collectHandler = (item, event) => {
+    const collectHandler = async (item, event) => {
       if (item.is_collect) {
         showMessage({
           content: "您确定取消该收藏吗？",
           cancleText: "取消",
-        }).then(() => {
-          topicCollect(item.id, !item.is_collect);
+        }).then(async () => {
+          await topicCollect(item.id, !item.is_collect);
           item.is_collect = !item.is_collect;
           showToast({ title: "取消成功" });
         });
       } else {
-        topicCollect(item.id, !item.is_collect);
+        await topicCollect(item.id, !item.is_collect);
         item.is_collect = !item.is_collect;
         showToast({ title: "收藏成功" });
       }
@@ -68,9 +68,11 @@ export default {
         // 取消主题
         url = `/topic_collect/de_collect`;
       }
-      const result = await post(url, {
+      await post(url, {
         accesstoken: localStorage.getItem("vue3_cnodejs_accesstoken"),
         topic_id,
+      }).then((err) => {
+        console.log(err);
       });
     };
 

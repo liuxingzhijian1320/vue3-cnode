@@ -62,7 +62,7 @@ export default {
   setup(props) {
     const store = useStore();
     const router = useRouter();
-    const token = ref("ae39d217-a130-492f-ad57-a2db3a5fe66d");
+    const token = ref("");
 
     const submit = async () => {
       if (!token.value) return;
