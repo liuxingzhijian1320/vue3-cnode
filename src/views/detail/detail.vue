@@ -67,25 +67,28 @@
 }
 </style>
 <template>
-  <div class="detail" v-if="detail?.author?.loginname">
-    <div class="header">
-      <div class="avatar"
-        :style="{backgroundImage: `url(${detail.author.avatar_url})`}"></div>
-      <div class="header-info">
-        <div class="header-name">{{detail.author.loginname}}</div>
-        <div class="header-date">{{formatDate(detail.create_at)}}</div>
-      </div>
-      <div class="cancle btn" v-if="detail.is_collect"
-        @click="collectHandler(detail)">取消收藏</div>
-      <div class="collect btn" v-if="!detail.is_collect"
-        @click="collectHandler(detail)">收藏</div>
-      <!-- <div class="header-type dc" :class="{'top': detail.top}">
+  <div>
+    <loading v-if="showloading"></loading>
+    <div class="detail" v-if="detail?.author?.loginname">
+      <div class="header">
+        <div class="avatar"
+          :style="{backgroundImage: `url(${detail.author.avatar_url})`}"></div>
+        <div class="header-info">
+          <div class="header-name">{{detail.author.loginname}}</div>
+          <div class="header-date">{{formatDate(detail.create_at)}}</div>
+        </div>
+        <div class="cancle btn" v-if="detail.is_collect"
+          @click="collectHandler(detail)">取消收藏</div>
+        <div class="collect btn" v-if="!detail.is_collect"
+          @click="collectHandler(detail)">收藏</div>
+        <!-- <div class="header-type dc" :class="{'top': detail.top}">
         {{detail.top ? '置顶' : defaultSetNavsFuc(detail.tab)?.title}}
       </div> -->
-    </div>
-    <div class="title">{{detail.title}}</div>
-    <div id="content-text" class="content-text">
-      <div id="content-value" v-html="detail.content"></div>
+      </div>
+      <div class="title">{{detail.title}}</div>
+      <div id="content-text" class="content-text">
+        <div id="content-value" v-html="detail.content"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -93,7 +96,7 @@
 <script>
 import { get, post } from "../../assets/scripts/request";
 import { useRoute } from "vue-router";
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, ref } from "vue";
 import { defaultSetNavsFuc, formatDate } from "../../assets/scripts/utils";
 import { showMessage, showToast } from "../../assets/scripts/tools";
 
@@ -104,12 +107,15 @@ export default {
     const route = useRoute();
     const detailId = route.query.id;
     const resultData = reactive({ detail: {} });
+    const showloading = ref(false); //是否显示loading效果
 
     const fetchDetail = async () => {
+      showloading.value = true;
       const result = await get(`/topic/${detailId}`);
       if (result?.success) {
         resultData.detail = result.data;
       }
+      showloading.value = false;
     };
 
     const collectHandler = (item) => {
@@ -147,6 +153,7 @@ export default {
     fetchDetail();
 
     return {
+      showloading,
       ...toRefs(resultData),
       defaultSetNavsFuc,
       formatDate,

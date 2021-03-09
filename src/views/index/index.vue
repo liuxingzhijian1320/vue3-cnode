@@ -116,7 +116,7 @@ export default {
     const navs = defaultSetNavsFuc();
 
     // 默认
-    const showloading = ref(true); //是否显示loading效果
+    const showloading = ref(false); //是否显示loading效果
     const tab = ref("all");
     const page = ref(1);
     const datalist = reactive({ list: [] });
