@@ -1,24 +1,15 @@
 # vue3-cnode
 
 ## Project setup
+
 ```
 yarn install
-```
 
-### Compiles and hot-reloads for development
-```
 yarn serve
-```
 
-### Compiles and minifies for production
-```
 yarn build
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
+## vue3 的文档
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[文档入口](https://www.vue3js.cn/docs/zh/)
