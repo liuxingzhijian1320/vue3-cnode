@@ -34,3 +34,7 @@ yarn build
     }
 
 ```
+
+## 百度统计
+
+下载后请 删除`public/index.html` 的统计代码
