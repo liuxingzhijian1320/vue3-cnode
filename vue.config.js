@@ -3,5 +3,6 @@ module.exports = {
   devServer: {
     port: 9493,
     open: true
-  }
+  },
+  assetsDir: "static"
 };
