@@ -1,5 +1,7 @@
 # vue3-cnode
 
+node version : 14.5.0
+
 ## 访问地址
 
 [demo 访问](http://cnode.zhooson.cn/#/index)
