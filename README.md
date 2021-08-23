@@ -40,3 +40,8 @@ yarn build
 ## 百度统计
 
 下载后请 删除`public/index.html` 的统计代码
+
+
+## 发布流程
+把 dist/*， cnodejs-2312.js 的文件传入服务器
+然后 npm init -y && npm i express -D && pm2 start cnodejs-2312.js
