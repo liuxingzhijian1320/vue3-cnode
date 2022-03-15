@@ -91,6 +91,24 @@
           <i class="iconfont icon-arrow arrow-icon pright"></i>
         </div>
       </div>
+      <div class="item" @click="copyGithub">
+        <div class="icon">
+          <i class="iconfont icon-github font-icon"></i>
+        </div>
+        <div class="value dc">Github地址</div>
+        <div class="icon">
+          <i class="iconfont icon-arrow arrow-icon pright"></i>
+        </div>
+      </div>
+      <div class="item" @click="website">
+        <div class="icon">
+          <i class="iconfont icon-website font-icon"></i>
+        </div>
+        <div class="value dc">博客</div>
+        <div class="icon">
+          <i class="iconfont icon-arrow arrow-icon pright"></i>
+        </div>
+      </div>
     </div>
     <div class="logout dc" v-if="info.id" @click="logout">退出</div>
   </div>
@@ -100,7 +118,7 @@
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { toRefs, reactive, computed, getCurrentInstance } from "vue";
-import { showToast, showMessage } from "../../assets/scripts/tools";
+import { showToast, showMessage, copyText } from "../../assets/scripts/tools";
 
 export default {
   name: "my",
@@ -148,6 +166,20 @@ export default {
       }
     };
 
+    const copyGithub = () => {
+      const url = "https://github.com/liuxingzhijian1320/vue3-cnode";
+      copyText(url).then(() => {
+        showToast({ title: "复制成功" });
+      });
+    };
+
+    const website = () => {
+      const url = "https://wwww.zhooson.cn";
+      copyText(url).then(() => {
+        showToast({ title: "复制成功" });
+      });
+    };
+
     return {
       ...toRefs(userInfo),
 
@@ -155,6 +187,8 @@ export default {
       logout,
       goCollect,
       goTheme,
+      copyGithub,
+      website,
     };
   },
 };

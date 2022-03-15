@@ -41,7 +41,7 @@
       <img class="img" src="../../assets/images/logo.png" alt="">
       <input type="text" placeholder="请输入token" v-model.trim="token"
         class="input" />
-      <div class="tips" @click="showHandler">当前的token获取方式👋👋👋
+      <div class="tips" @click="showHandler">点击此处 => 当前的token获取方式👋👋👋
         <!-- <a target="_blank"
           href="https://cnodejs.org/setting">传送门👋👋👋</a> -->
       </div>
